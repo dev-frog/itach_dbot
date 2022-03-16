@@ -6,6 +6,7 @@ import session from 'express-session';
 import passport from 'passport';
 import morgan from 'morgan';
 import routes from '../routes';
+import  store from 'connect-mongo';
 require('../strategies/discord')
 
 export function createApp(): Express {
@@ -14,7 +15,7 @@ export function createApp(): Express {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   // Enable cors
-  app.use(cors({ origin: ['http://localhost:3000'], credentials: true }));
+  app.use(cors({ origin: ['*'], credentials: true }));
 
 
   // Enable session
@@ -25,6 +26,7 @@ export function createApp(): Express {
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
+    store: store.create({ mongoUrl: process.env.MONGODB_URI! }),
   }));
 
   // Enable passport
